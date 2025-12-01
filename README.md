@@ -1,4 +1,5 @@
 This utility is fork of maxmati/a4tech-bloody-linux-driver. Goal of it is personal needs(have pet project, add support of author's mouse), clear code base(move project to C, update using instruments) and improve UX(in perfect, add test auto support of all potential supported bloody mouse)
+
 This tool allows setting backlight level of A4TECH wired mouse (USB connected), e.g. A4TECH V7M, A60 etc.
 
 # Build instructions
@@ -24,7 +25,7 @@ make
 
 1. Get USB PID of device:
 ```
-~$ lsusb -d 09da: | cut -d ' ' -f6 | cut -d ':' -f2
+lsusb -d 09da: | cut -d ' ' -f6 | cut -d ':' -f2
 ```
 
 2. Add that PID to Mouce.h & Mouce.cpp
@@ -34,7 +35,7 @@ Mouse.h: add line with PID and add name to COMPATIBLE_PIDS variable as all the o
 Mouse.cpp: add 3 lines: case, name and break; as all the other mouses.
 
 
-## Run
+## Run example
 ```
 sudo ./bloody
 Available devices:
