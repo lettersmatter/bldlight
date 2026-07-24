@@ -14,7 +14,6 @@ void Mouse::init() {
     libusb_set_debug(context, LIBUSB_LOG_LEVEL_INFO);
 
     discoverDevices();
-
 }
 
 void Mouse::discoverDevices() {
@@ -53,7 +52,6 @@ void Mouse::discoverDevices() {
                 }
 
             devices.insert(std::pair<int, libusb_device_handle*>(libusb_get_device_address(devs[i]), currentDevice));
-
         }
 
     }
@@ -123,8 +121,6 @@ int Mouse::readFromMouse(uint8_t *request, size_t requestSize, uint8_t *response
         cout << "Unnable to receive data" << endl;
         return -2;
     }
-
-
 }
 
 uint8_t Mouse::getBackLightLevel() {
