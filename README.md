@@ -6,8 +6,8 @@ This tool allows setting backlight level of A4TECH wired mouse (USB connected), 
 ## Fedora 29
 ```
 dnf install gcc-c++ cmake libusbx-devel
-git clone https://github.com/maxmati/a4tech-bloody-linux-driver
-cd ./a4tech-bloody-linux-driver
+git clone https://github.com/lettersmatter/bldlight
+cd ./bldlight
 cmake .
 make
 ```
