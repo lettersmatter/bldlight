@@ -1,4 +1,4 @@
-This utility is fork of maxmati/a4tech-bloody-linux-driver. Goal of it is personal needs(have pet project, add support of author's mouse), clear code base(move project to C, update using instruments) and improve UX(in perfect, add test auto support of all potential supported bloody mouse). in fact after this improvments utility will compile and launch without additional settings on much mouses
+This utility is fork of maxmati/a4tech-bloody-linux-driver. Goal of it is personal needs(have pet project, add support of author's mouse), clear code base(move project to C, update using instruments) and improve UX(classic use style like utility managed by arguments, without capturing input). Maybe add setting sensivity
 
 This tool allows setting backlight level of A4TECH wired mouse (USB connected), e.g. A4TECH V7M, A60 etc.
 
