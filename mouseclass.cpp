@@ -52,6 +52,52 @@ bool Mouse::selectDevice(int address) {
     return true;
 }
 
+int Mouse::setBackLightLevel(uint8_t level) {
+    uint8_t data[72] = { A4TECH_MAGIC, BACKLIGHT_OPCODE, 0x00, 0x00, BACKLIGHT_WRITE, 0x00, 0x00, 0x00, level, 0x00 };
+    if (level < 0 || level > 3) return -1;
+    if (writeToMouse(data, sizeof(data)) < 0) return -2;
+    return 0;
+}
+
+uint8_t Mouse::getBackLightLevel() {
+    uint8_t request[72] = { A4TECH_MAGIC, BACKLIGHT_OPCODE, 0x00, 0x00, BACKLIGHT_READ, 0x00 };
+    uint8_t response[72];
+    readFromMouse(request, sizeof(request), response, sizeof(response));
+    return response[8];
+}
+
+int Mouse::writeToMouse(uint8_t data[], size_t size) {
+    int res = libusb_control_transfer(currentDevice, 0x21, 9, 0x0307, 2, data, size, 10000);
+    switch (res){
+        case LIBUSB_ERROR_TIMEOUT:
+            cout << "LIBUSB_ERROR_TIMEOUT" << endl;
+            return -1;
+        case LIBUSB_ERROR_PIPE:
+            cout << "LIBUSB_ERROR_PIPE" << endl;
+            return -1;
+        case LIBUSB_ERROR_NO_DEVICE:
+            cout << "LIBUSB_ERROR_NO_DEVICE" << endl;
+            return -1;
+        case LIBUSB_ERROR_BUSY:
+            cout << "LIBUSB_ERROR_BUSY" << endl;
+            return -1;
+        case LIBUSB_ERROR_INVALID_PARAM:
+            cout << "LIBUSB_ERROR_INVALID_PARAM" << endl;
+        default:
+            return 0;
+    }
+}
+
+int Mouse::readFromMouse(uint8_t *request, size_t requestSize, uint8_t *response, size_t responseSize) {
+    if (writeToMouse(request, requestSize) < 0) return -1;
+    int res =  libusb_control_transfer(currentDevice, 0xa1, 1, 0x0307, 2, response, responseSize, 10000);
+    if (res < 0) {
+        cout << "Unnable to receive data" << endl;
+        return -2;
+    }
+	return 0;
+}
+
 void Mouse::discoverDevices() {
     libusb_device** devs;
     ssize_t cnt = libusb_get_device_list(context, &devs);
@@ -99,50 +145,4 @@ bool Mouse::isCompatibleDevice(libusb_device_descriptor &desc) {
     for(size_t i = 0; i < COMPATIBLE_PIDS_SIZE; ++i)
         if(desc.idProduct == COMPATIBLE_PIDS[i]) return true;
     return false;
-}
-
-int Mouse::setBackLightLevel(uint8_t level) {
-    uint8_t data[72] = { A4TECH_MAGIC, BACKLIGHT_OPCODE, 0x00, 0x00, BACKLIGHT_WRITE, 0x00, 0x00, 0x00, level, 0x00 };
-    if (level < 0 || level > 3) return -1;
-    if (writeToMouse(data, sizeof(data)) < 0) return -2;
-    return 0;
-}
-
-int Mouse::writeToMouse(uint8_t data[], size_t size) {
-    int res = libusb_control_transfer(currentDevice, 0x21, 9, 0x0307, 2, data, size, 10000);
-    switch (res){
-        case LIBUSB_ERROR_TIMEOUT:
-            cout << "LIBUSB_ERROR_TIMEOUT" << endl;
-            return -1;
-        case LIBUSB_ERROR_PIPE:
-            cout << "LIBUSB_ERROR_PIPE" << endl;
-            return -1;
-        case LIBUSB_ERROR_NO_DEVICE:
-            cout << "LIBUSB_ERROR_NO_DEVICE" << endl;
-            return -1;
-        case LIBUSB_ERROR_BUSY:
-            cout << "LIBUSB_ERROR_BUSY" << endl;
-            return -1;
-        case LIBUSB_ERROR_INVALID_PARAM:
-            cout << "LIBUSB_ERROR_INVALID_PARAM" << endl;
-        default:
-            return 0;
-    }
-}
-
-int Mouse::readFromMouse(uint8_t *request, size_t requestSize, uint8_t *response, size_t responseSize) {
-    if (writeToMouse(request, requestSize) < 0) return -1;
-    int res =  libusb_control_transfer(currentDevice, 0xa1, 1, 0x0307, 2, response, responseSize, 10000);
-    if (res < 0) {
-        cout << "Unnable to receive data" << endl;
-        return -2;
-    }
-	return 0;
-}
-
-uint8_t Mouse::getBackLightLevel() {
-    uint8_t request[72] = { A4TECH_MAGIC, BACKLIGHT_OPCODE, 0x00, 0x00, BACKLIGHT_READ, 0x00 };
-    uint8_t response[72];
-    readFromMouse(request, sizeof(request), response, sizeof(response));
-    return response[8];
 }
