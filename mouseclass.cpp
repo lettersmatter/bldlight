@@ -46,6 +46,12 @@ void Mouse::listDevices() {
     }
 }
 
+bool Mouse::selectDevice(int address) {
+    if (devices.count(address) == 0) return false;
+    currentDevice = devices.at(address);
+    return true;
+}
+
 void Mouse::discoverDevices() {
     libusb_device** devs;
     ssize_t cnt = libusb_get_device_list(context, &devs);
