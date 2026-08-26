@@ -14,9 +14,9 @@ int main() {
 	std::cout << "Current backlight level: " << (int)m.getBackLightLevel() << std::endl;
 
 	do {
-		std::cout << "Select backlight level(0-3):";
+		std::cout << "Select backlight level(0-3): ";
 		std::cin >> level;
-	}while(m.setBackLightLevel(level) < 0);
+	} while(m.setBackLightLevel(level) < 0);
 
 	return 0;
 }
