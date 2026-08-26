@@ -1,5 +1,4 @@
 #include <iostream>
-#include "Mouse.h"
 
 int main() {
 	Mouse m;
