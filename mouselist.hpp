@@ -15,6 +15,43 @@ static const int COMPATIBLE_PIDS[] = {
 	BLOODY_R3_PID, BLOODY_AL9_PID, BLOODY_R70_PID, BLOODY_A7_PID, BLOODY_A9_PID
 };
 
+std::string get_name(static const int mouse_pid) {
+	switch (mouse_pid) {
+		case BLOODY_A60_PID:
+		    return "Bloody A60";
+        case BLOODY_V5_PID:
+            return "Bloody V5";
+        case BLOODY_V7_PID:
+            return "Bloody V7";
+        case BLOODY_V8_PID:
+            return "Bloody V8";
+        case BLOODY_R7_PID:
+            return "Bloody R7";
+        case BLOODY_R8_1_PID:
+            return "Bloody R8-1";
+        case BLOODY_R3_PID:
+            return "Bloody R3";
+        case BLOODY_AL9_PID:
+            return "Bloody AL9";
+        case BLOODY_R70_PID:
+            return "Bloody R70";
+        case BLOODY_A7_PID:
+            return "Bloody A7";
+        case BLOODY_A9_PID:
+            return "Bloody A9";
+        case BLOODY_RT5_PID:
+            return "Bloody RT5";
+        case BLOODY_V8M_PID:
+            return "Bloody V8M";
+        case BLOODY_R8_PID:
+            return "Bloody R8";
+        case BLOODY_J95S_PID:
+            return "Bloody J95S";
+        default:
+            return "Unknown";
+        }
+}
+
 static const size_t COMPATIBLE_PIDS_SIZE = sizeof(COMPATIBLE_PIDS) / sizeof(COMPATIBLE_PIDS[0]);
 
 static const int A4TECH_MAGIC = 0x07;
@@ -160,7 +197,7 @@ void Mouse::listDevices() {
         libusb_device_descriptor desc;
         libusb_get_device_descriptor(device, &desc);
 		
-        std::string name;
+        /*std::string name;
         switch (desc.idProduct) {
 		    case BLOODY_A60_PID:
 			    name = "Bloody A60";
@@ -209,8 +246,8 @@ void Mouse::listDevices() {
                 break;
             default:
                 name = "Unknown";
-        }
-        std::cout << devHand.first << ": " << name << endl;
+        }*/
+        std::cout << devHand.first << ": " << /*name*/get_name(desc.idProduct) << endl;
     }
 }
 
