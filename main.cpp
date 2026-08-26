@@ -4,6 +4,7 @@
 int main() {
 	Mouse m;
 	int address, level;
+	std::cout << std::endl;
 	m.init();
 	do {
 		m.listDevices();
