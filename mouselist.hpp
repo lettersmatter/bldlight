@@ -196,57 +196,6 @@ void Mouse::listDevices() {
         libusb_device* device = libusb_get_device(devHand.second);
         libusb_device_descriptor desc;
         libusb_get_device_descriptor(device, &desc);
-		
-        /*std::string name;
-        switch (desc.idProduct) {
-		    case BLOODY_A60_PID:
-			    name = "Bloody A60";
-			    break;
-            case BLOODY_V5_PID:
-                name = "Bloody V5";
-                break;
-            case BLOODY_V7_PID:
-                name = "Bloody V7";
-                break;
-            case BLOODY_V8_PID:
-                name = "Bloody V8";
-                break;
-            case BLOODY_R7_PID:
-                name = "Bloody R7";
-                break;
-            case BLOODY_R8_1_PID:
-                name = "Bloody R8-1";
-                break;
-            case BLOODY_R3_PID:
-                name = "Bloody R3";
-                break;
-            case BLOODY_AL9_PID:
-                name = "Bloody AL9";
-                break;
-            case BLOODY_R70_PID:
-                name = "Bloody R70";
-                break;
-            case BLOODY_A7_PID:
-                name = "Bloody A7";
-                break;
-            case BLOODY_A9_PID:
-                name = "Bloody A9";
-                break;
-            case BLOODY_RT5_PID:
-                name = "Bloody RT5";
-                break;
-            case BLOODY_V8M_PID:
-                name = "Bloody V8M";
-		        break;
-            case BLOODY_R8_PID:
-                name = "Bloody R8";
-                break;
-            case BLOODY_J95S_PID:
-                name = "Bloody J95S";
-                break;
-            default:
-                name = "Unknown";
-        }*/
         std::cout << devHand.first << ": " << /*name*/get_name(desc.idProduct) << endl;
     }
 }
