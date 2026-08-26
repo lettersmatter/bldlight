@@ -3,7 +3,7 @@
 #include <libusb-1.0/libusb.h>
 
 static const int A4TECH_VID = 0x09da;
-
+/*
 static const int BLOODY_A60_PID = 0x3e1d;
 static const int BLOODY_J95S_PID = 0xfee3;
 static const int BLOODY_RT5_PID = 0x7f1b;
@@ -19,6 +19,11 @@ static const int BLOODY_AL9_PID = 0xf633;
 static const int BLOODY_R70_PID = 0xf643;
 static const int BLOODY_A7_PID = 0x7e36;
 static const int BLOODY_A9_PID = 0x1003;
+*/
+static const int BLOODY_A60_PID = 0x3e1d, BLOODY_J95S_PID = 0xfee3, BLOODY_RT5_PID = 0x7f1b, BLOODY_V8M_PID = 0x1094, 
+	BLOODY_R8_PID = 0x7c10, BLOODY_V5_PID = 0x172A, BLOODY_V7_PID = 0xF613, BLOODY_V8_PID = 0x11F5, BLOODY_R7_PID = 0x1485,
+	BLOODY_R8_1_PID = 0x14ee, BLOODY_R3_PID = 0x1a5a, BLOODY_AL9_PID = 0xf633, BLOODY_R70_PID = 0xf643, BLOODY_A7_PID = 0x7e36
+	BLOODY_A9_PID = 0x1003;
 
 static const int COMPATIBLE_PIDS[] = { 
     BLOODY_A60_PID, BLOODY_J95S_PID, BLOODY_RT5_PID, BLOODY_V8M_PID, BLOODY_R8_PID,
