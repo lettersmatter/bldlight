@@ -3,21 +3,12 @@ This utility is fork of maxmati/a4tech-bloody-linux-driver. Goal of it is person
 This tool allows setting backlight level of A4TECH wired mouse (USB connected), e.g. A4TECH V7M, A60 etc.
 
 # Build instructions
-## Fedora 29
-```
-dnf install gcc-c++ cmake libusbx-devel
-git clone https://github.com/lettersmatter/bldlight
-cd ./bldlight
-cmake .
-make
-```
 
 ## Ubuntu 24.04
 ```
 sudo apt install g++ cmake libusb-1.0-0-dev pkg-config
 git clone https://github.com/lettersmatter/bldlight
 cd ./bldlight
-cmake .
 make
 ```
 
