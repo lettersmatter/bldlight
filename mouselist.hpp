@@ -15,7 +15,7 @@ static const int COMPATIBLE_PIDS[] = {
 	BLOODY_R3_PID, BLOODY_AL9_PID, BLOODY_R70_PID, BLOODY_A7_PID, BLOODY_A9_PID
 };
 
-std::string get_name(static const int mouse_pid) {
+std::string get_name(const int mouse_pid) {
 	switch (mouse_pid) {
 		case BLOODY_A60_PID:
 		    return "Bloody A60";
