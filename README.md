@@ -6,7 +6,7 @@ This tool allows setting backlight level of A4TECH wired mouse (USB connected), 
 
 ## Ubuntu 24.04
 ```
-sudo apt install g++ libusb-1.0-0-dev
+sudo apt install g++ make libusb-1.0-0-dev
 git clone https://github.com/lettersmatter/bldlight
 cd ./bldlight
 make
