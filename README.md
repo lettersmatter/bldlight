@@ -1,10 +1,21 @@
-This utility is fork of maxmati/a4tech-bloody-linux-driver. Goal of it is personal needs(have pet project, add support of author's mouse), clear code base(move project to C, compiling using only with make) and improve UX(classic use style like utility managed by arguments, without capturing input). Maybe add setting sensivity
-
 This tool allows setting backlight level of A4TECH wired mouse (USB connected), e.g. A4TECH V7M, A60 etc.
+
+bldlight is fork of maxmati/a4tech-bloody-linux-driver. Goals of it are personal needs(have pet project, add support of author's mouse), clear code base and improve UX.
+
+Differences by original repository:
+1. compiling with only make(without CMake)
+2. add support of Bloody A60
+
+Planned improves:
+1. migrating to C
+2. add install script and using without sudo
+3. realize classic use style with arguments, without capturing input
+4. add setting sensivity
 
 # Build instructions
 
 ## Ubuntu 24.04
+
 ```
 sudo apt install g++ make libusb-1.0-0-dev
 git clone https://github.com/lettersmatter/bldlight
@@ -21,14 +32,12 @@ lsusb -d 09da: | cut -d ' ' -f6 | cut -d ':' -f2
 
 ## Edits to add another mouse
 
-Add PID to mouselist.hpp
-
-add line with PID and add name to COMPATIBLE_PIDS variable as all the other mouses.
-
-add 3 lines: case, name and break; as all the other mouses.
-
+Add PID to mouselist.hpp:
+  add line with PID and add name to COMPATIBLE_PIDS variable as all the other mouses.
+  add 3 lines: case, name and break; as all the other mouses.
 
 ## Run example
+
 ```
 sudo ./bldlight
 
