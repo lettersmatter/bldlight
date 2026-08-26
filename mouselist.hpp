@@ -3,23 +3,7 @@
 #include <libusb-1.0/libusb.h>
 
 static const int A4TECH_VID = 0x09da;
-/*
-static const int BLOODY_A60_PID = 0x3e1d;
-static const int BLOODY_J95S_PID = 0xfee3;
-static const int BLOODY_RT5_PID = 0x7f1b;
-static const int BLOODY_V8M_PID = 0x1094;
-static const int BLOODY_R8_PID = 0x7c10;
-static const int BLOODY_V5_PID = 0x172A;
-static const int BLOODY_V7_PID = 0xF613;
-static const int BLOODY_V8_PID = 0x11F5;
-static const int BLOODY_R7_PID = 0x1485;
-static const int BLOODY_R8_1_PID = 0x14ee;
-static const int BLOODY_R3_PID = 0x1a5a;
-static const int BLOODY_AL9_PID = 0xf633;
-static const int BLOODY_R70_PID = 0xf643;
-static const int BLOODY_A7_PID = 0x7e36;
-static const int BLOODY_A9_PID = 0x1003;
-*/
+
 static const int BLOODY_A60_PID = 0x3e1d, BLOODY_J95S_PID = 0xfee3, BLOODY_RT5_PID = 0x7f1b, BLOODY_V8M_PID = 0x1094, 
 	BLOODY_R8_PID = 0x7c10, BLOODY_V5_PID = 0x172A, BLOODY_V7_PID = 0xF613, BLOODY_V8_PID = 0x11F5, BLOODY_R7_PID = 0x1485,
 	BLOODY_R8_1_PID = 0x14ee, BLOODY_R3_PID = 0x1a5a, BLOODY_AL9_PID = 0xf633, BLOODY_R70_PID = 0xf643, BLOODY_A7_PID = 0x7e36
@@ -35,10 +19,7 @@ static const size_t COMPATIBLE_PIDS_SIZE = sizeof(COMPATIBLE_PIDS) / sizeof(COMP
 
 static const int A4TECH_MAGIC = 0x07;
 
-static const int BACKLIGHT_OPCODE = 0x11;
-static const int BACKLIGHT_WRITE = 0x80;
-static const int BACKLIGHT_READ = 0x00;
-
+static const int BACKLIGHT_OPCODE = 0x11, BACKLIGHT_WRITE = 0x80, BACKLIGHT_READ = 0x00;
 
 class Mouse {
 public:
@@ -55,23 +36,20 @@ private:
 
     int writeToMouse(uint8_t data[], size_t size);
     int readFromMouse(uint8_t* request, size_t requestSize, uint8_t* response, size_t responseSize);
-
     void discoverDevices();
-
     bool isCompatibleDevice(libusb_device_descriptor &desc);
 };
 
-using std::cout; using std::endl;
+using std::cout;
+using std::endl;
 
 void Mouse::init() {
     int ret = libusb_init(&context);
     if(ret < 0) {
-        cout<<"Init Error "<<ret<<endl;
+        cout << "Init Error " << ret << endl;
         return;
     }
-
     libusb_set_debug(context, LIBUSB_LOG_LEVEL_INFO);
-
     discoverDevices();
 }
 
@@ -82,7 +60,6 @@ void Mouse::discoverDevices() {
         cout << "Get Device Error" << endl;
         return;
     }
-
     for (int i = 0; i < cnt; ++i) {
         libusb_device_descriptor desc;
         libusb_get_device_descriptor(devs[i], &desc);
@@ -103,32 +80,25 @@ void Mouse::discoverDevices() {
                     cout << "Status: " << status << endl;
                     continue;
             }
-
             if(libusb_kernel_driver_active(currentDevice, 2) == 1 && libusb_detach_kernel_driver(currentDevice, 2) != 0) {
                 libusb_close(currentDevice);
                 continue;
             }
-
             devices.insert(std::pair<int, libusb_device_handle*>(libusb_get_device_address(devs[i]), currentDevice));
         }
-
     }
     libusb_free_device_list(devs, 1);
-
     if (devices.size() == 0){
         cout << "No suitable device found. " << endl;
         return;
     }
-
     currentDevice = devices.begin()->second;
 }
 
 bool Mouse::isCompatibleDevice(libusb_device_descriptor &desc) {
     if(desc.idVendor != A4TECH_VID) return false;
-
     for(size_t i = 0; i < COMPATIBLE_PIDS_SIZE; ++i)
         if(desc.idProduct == COMPATIBLE_PIDS[i]) return true;
-
     return false;
 }
 
@@ -139,11 +109,8 @@ Mouse::~Mouse() {
 
 int Mouse::setBackLightLevel(uint8_t level) {
     uint8_t data[72] = { A4TECH_MAGIC, BACKLIGHT_OPCODE, 0x00, 0x00, BACKLIGHT_WRITE, 0x00, 0x00, 0x00, level, 0x00 };
-
     if (level < 0 || level > 3) return -1;
-
     if (writeToMouse(data, sizeof(data)) < 0) return -2;
-
     return 0;
 }
 
@@ -171,7 +138,6 @@ int Mouse::writeToMouse(uint8_t data[], size_t size) {
 
 int Mouse::readFromMouse(uint8_t *request, size_t requestSize, uint8_t *response, size_t responseSize) {
     if (writeToMouse(request, requestSize) < 0) return -1;
-
     int res =  libusb_control_transfer(currentDevice, 0xa1, 1, 0x0307, 2, response, responseSize, 10000);
     if (res < 0) {
         cout << "Unnable to receive data" << endl;
@@ -182,9 +148,7 @@ int Mouse::readFromMouse(uint8_t *request, size_t requestSize, uint8_t *response
 uint8_t Mouse::getBackLightLevel() {
     uint8_t request[72] = { A4TECH_MAGIC, BACKLIGHT_OPCODE, 0x00, 0x00, BACKLIGHT_READ, 0x00 };
     uint8_t response[72];
-
     readFromMouse(request, sizeof(request), response, sizeof(response));
-
     return response[8];
 }
 
@@ -192,12 +156,10 @@ void Mouse::listDevices() {
     std::cout << "Available devices: " << endl;
     for (auto&devHand : devices) {
         libusb_device* device = libusb_get_device(devHand.second);
-
         libusb_device_descriptor desc;
         libusb_get_device_descriptor(device, &desc);
-
+		
         std::string name;
-
         switch (desc.idProduct) {
 		    case BLOODY_A60_PID:
 			    name = "Bloody A60";
@@ -247,15 +209,12 @@ void Mouse::listDevices() {
             default:
                 name = "Unknown";
         }
-
         std::cout << devHand.first << ": " << name << endl;
     }
-
 }
 
 bool Mouse::selectDevice(int address) {
     if (devices.count(address) == 0) return false;
-
     currentDevice = devices.at(address);
     return true;
 }
