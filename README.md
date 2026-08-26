@@ -42,6 +42,7 @@ sudo ./bldlight
 Available devices:
 36:Bloody V7
 Enter device address: 36
+
 Current backlight level: 3
 Select backlight level(0-3):0
 ```
