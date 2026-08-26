@@ -10,11 +10,9 @@ Planned improves:
 1. migrating to C
 2. add install script and using without sudo
 3. realize classic use style with arguments, without capturing input
-4. add setting sensivity
+4. add setting sensitivity
 
-# Build instructions
-
-## Ubuntu 24.04
+## Ubuntu 24.04 requirements
 
 ```
 sudo apt install g++ make libusb-1.0-0-dev
