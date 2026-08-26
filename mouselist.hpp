@@ -1,4 +1,5 @@
 #include <map>
+#include <iostream>
 #include <libusb-1.0/libusb.h>
 
 static const int A4TECH_VID = 0x09da;
@@ -20,9 +21,11 @@ static const int BLOODY_A7_PID = 0x7e36;
 static const int BLOODY_A9_PID = 0x1003;
 
 static const int COMPATIBLE_PIDS[] = { 
-    BLOODY_A60_PID, BLOODY_J95S_PID, BLOODY_RT5_PID, BLOODY_V8M_PID, BLOODY_R8_PID, BLOODY_V5_PID, BLOODY_V7_PID, BLOODY_V8_PID,
-    BLOODY_R7_PID, BLOODY_R8_1_PID, BLOODY_R3_PID, BLOODY_AL9_PID, BLOODY_R70_PID, BLOODY_A7_PID, BLOODY_A9_PID
+    BLOODY_A60_PID, BLOODY_J95S_PID, BLOODY_RT5_PID, BLOODY_V8M_PID, BLOODY_R8_PID,
+	BLOODY_V5_PID, BLOODY_V7_PID, BLOODY_V8_PID, BLOODY_R7_PID, BLOODY_R8_1_PID,
+	BLOODY_R3_PID, BLOODY_AL9_PID, BLOODY_R70_PID, BLOODY_A7_PID, BLOODY_A9_PID
 };
+
 static const size_t COMPATIBLE_PIDS_SIZE = sizeof(COMPATIBLE_PIDS) / sizeof(COMPATIBLE_PIDS[0]);
 
 static const int A4TECH_MAGIC = 0x07;
@@ -46,15 +49,12 @@ private:
     libusb_context* context = nullptr;
 
     int writeToMouse(uint8_t data[], size_t size);
-    int readFromMouse(uint8_t* request, size_t requestSize,
-                       uint8_t* response, size_t responseSize);
+    int readFromMouse(uint8_t* request, size_t requestSize, uint8_t* response, size_t responseSize);
 
     void discoverDevices();
 
     bool isCompatibleDevice(libusb_device_descriptor &desc);
 };
-
-#include <iostream>
 
 using std::cout; using std::endl;
 
@@ -99,11 +99,10 @@ void Mouse::discoverDevices() {
                     continue;
             }
 
-            if(libusb_kernel_driver_active(currentDevice, 2) == 1)
-                if(libusb_detach_kernel_driver(currentDevice, 2) != 0) {
-                    libusb_close(currentDevice);
-                    continue;
-                }
+            if(libusb_kernel_driver_active(currentDevice, 2) == 1 && libusb_detach_kernel_driver(currentDevice, 2) != 0) {
+                libusb_close(currentDevice);
+                continue;
+            }
 
             devices.insert(std::pair<int, libusb_device_handle*>(libusb_get_device_address(devs[i]), currentDevice));
         }
@@ -112,7 +111,7 @@ void Mouse::discoverDevices() {
     libusb_free_device_list(devs, 1);
 
     if (devices.size() == 0){
-        cout << "No suitable device found." << endl;
+        cout << "No suitable device found. " << endl;
         return;
     }
 
@@ -134,7 +133,7 @@ Mouse::~Mouse() {
 }
 
 int Mouse::setBackLightLevel(uint8_t level) {
-    uint8_t data[72] = {A4TECH_MAGIC, BACKLIGHT_OPCODE, 0x00, 0x00, BACKLIGHT_WRITE, 0x00, 0x00, 0x00, level, 0x00, };
+    uint8_t data[72] = { A4TECH_MAGIC, BACKLIGHT_OPCODE, 0x00, 0x00, BACKLIGHT_WRITE, 0x00, 0x00, 0x00, level, 0x00 };
 
     if (level < 0 || level > 3) return -1;
 
@@ -166,19 +165,17 @@ int Mouse::writeToMouse(uint8_t data[], size_t size) {
 }
 
 int Mouse::readFromMouse(uint8_t *request, size_t requestSize, uint8_t *response, size_t responseSize) {
-    if (writeToMouse(request, requestSize) < 0){
-        return -1;
-    }
+    if (writeToMouse(request, requestSize) < 0) return -1;
 
     int res =  libusb_control_transfer(currentDevice, 0xa1, 1, 0x0307, 2, response, responseSize, 10000);
-    if (res < 0){
+    if (res < 0) {
         cout << "Unnable to receive data" << endl;
         return -2;
     }
 }
 
 uint8_t Mouse::getBackLightLevel() {
-    uint8_t request[72] = {A4TECH_MAGIC, BACKLIGHT_OPCODE, 0x00, 0x00, BACKLIGHT_READ, 0x00, };
+    uint8_t request[72] = { A4TECH_MAGIC, BACKLIGHT_OPCODE, 0x00, 0x00, BACKLIGHT_READ, 0x00 };
     uint8_t response[72];
 
     readFromMouse(request, sizeof(request), response, sizeof(response));
@@ -187,8 +184,8 @@ uint8_t Mouse::getBackLightLevel() {
 }
 
 void Mouse::listDevices() {
-    std::cout << "Available devices:" << endl;
-    for (auto&devHand : devices){
+    std::cout << "Available devices: " << endl;
+    for (auto&devHand : devices) {
         libusb_device* device = libusb_get_device(devHand.second);
 
         libusb_device_descriptor desc;
@@ -196,7 +193,7 @@ void Mouse::listDevices() {
 
         std::string name;
 
-        switch (desc.idProduct){
+        switch (desc.idProduct) {
 		    case BLOODY_A60_PID:
 			    name = "Bloody A60";
 			    break;
@@ -246,7 +243,7 @@ void Mouse::listDevices() {
                 name = "Unknown";
         }
 
-        std::cout << devHand.first << ":" << name << endl;
+        std::cout << devHand.first << ": " << name << endl;
     }
 
 }
