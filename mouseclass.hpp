@@ -20,7 +20,6 @@ private:
 using std::cout;
 using std::endl;
 
-
 Mouse::~Mouse() {
     for (auto& dev : devices) libusb_close(dev.second);
     if (context != nullptr) libusb_exit(context);
