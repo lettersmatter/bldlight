@@ -12,6 +12,9 @@ Planned improves:
 3. realize classic use style with arguments, without capturing input
 4. add setting sensitivity
 
+Problems:
+1. settings are cleaning after reconnecting mouse
+
 ## Ubuntu 24.04 requirements
 
 ```
