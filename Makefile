@@ -1,2 +1,2 @@
 all:
-	g++ main.cpp Mouse.cpp -lusb-1.0
+	g++ main.cpp mouselist.cpp -lusb-1.0
