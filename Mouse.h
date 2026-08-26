@@ -1,7 +1,7 @@
 #pragma once
 
 #include <map>
-#include <libusb.h>
+#include <libusb-1.0/libusb.h>
 
 static const int A4TECH_VID = 0x09da;
 
