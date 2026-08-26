@@ -143,6 +143,7 @@ int Mouse::readFromMouse(uint8_t *request, size_t requestSize, uint8_t *response
         cout << "Unnable to receive data" << endl;
         return -2;
     }
+	return 0;
 }
 
 uint8_t Mouse::getBackLightLevel() {
